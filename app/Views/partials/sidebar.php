@@ -143,13 +143,31 @@
             </a>
           </li>
 
-          <li class="nav-item">
-            <!-- Link sellout -->
-            <a href="/admin/program-sellout" class="nav-link <?= (uri_string() == 'admin/program-sellout') ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-list-alt"></i>
-              <p>Program Sell OUT</p>
+          <!-- Jika ingin pengecekan lebih fleksibel untuk sub menu -->
+          <li class="nav-item <?= strpos(uri_string(), 'admin/programs') === 0 ? 'menu-open' : '' ?>">
+            <a href="#" class="nav-link <?= strpos(uri_string(), 'admin/programs') === 0 ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-cubes"></i>
+              <p>
+                Program
+                <i class="right fas fa-angle-left"></i>
+              </p>
             </a>
-
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?= route_to('admin.programs') ?>"
+                  class="nav-link <?= (uri_string() == 'admin/programs') ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>List Program</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?= route_to('admin.programs.create') ?>"
+                  class="nav-link <?= (uri_string() == 'admin/programs/create') ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Buat Program Baru</p>
+                </a>
+              </li>
+            </ul>
           </li>
         <?php endif; ?>
 

@@ -60,16 +60,35 @@ $routes->group('superadmin', ['filter' => 'role:superadmin'], function ($routes)
 
 // Routes for Admin and Superadmin (Admin Management)
 $routes->group('admin', ['filter' => 'role:admin,superadmin'], function ($routes) {
+    // // Program Routes
+    // $routes->get('programs', 'Admin\ProgramController::index', ['as' => 'admin.programs']);
+    // $routes->get('programs/create', 'Admin\ProgramController::create', ['as' => 'admin.programs.create']);
+    // $routes->post('programs/store', 'Admin\ProgramController::store', ['as' => 'admin.programs.store']);
+    // $routes->get('programs/edit/(:num)', 'Admin\ProgramController::edit/$1', ['as' => 'admin.programs.edit']);
+    // $routes->post('programs/update/(:num)', 'Admin\ProgramController::update/$1', ['as' => 'admin.programs.update']);
+    // $routes->get('programs/delete/(:num)', 'Admin\ProgramController::delete/$1', ['as' => 'admin.programs.delete']);
+
+
+
+    // Program Management
+    $routes->group('programs', function ($routes) {
+        $routes->get('/', 'Admin\ProgramController::index', ['as' => 'admin.programs']);
+        $routes->get('create', 'Admin\ProgramController::create', ['as' => 'admin.programs.create']);
+        $routes->post('store', 'Admin\ProgramController::store', ['as' => 'admin.programs.store']);
+        $routes->get('edit/(:num)', 'Admin\ProgramController::edit/$1', ['as' => 'admin.programs.edit']);
+        $routes->post('update/(:num)', 'Admin\ProgramController::update/$1', ['as' => 'admin.programs.update']);
+        $routes->get('delete/(:num)', 'Admin\ProgramController::delete/$1', ['as' => 'admin.programs.delete']);
+    });
+
+    // Sellout Management
+    $routes->group('sellout', function ($routes) {
+        $routes->get('import/(:num)', 'Admin\SelloutClaimController::import/$1', ['as' => 'admin.sellout.import']);
+        $routes->post('process-import/(:num)', 'Admin\SelloutClaimController::processImport/$1', ['as' => 'admin.sellout.process-import']);
+        $routes->get('report/(:num)', 'Admin\SelloutClaimController::report/$1', ['as' => 'admin.sellout.report']);
+    });
 
     // Admin Dashboard
     $routes->get('dashboard', 'AdminController::dashboard');
-
-
-    // $routes->get('sellout', 'Admin\SelloutController::index');
-    // $routes->post('sellout/save', 'Admin\SelloutController::save');
-    // $routes->post('sellout/update/(:num)', 'Admin\SelloutController::update/$1');
-    // $routes->get('sellout/delete/(:num)', 'Admin\SelloutController::delete/$1');
-
     // Program Sellout
     $routes->get('program-sellout', 'Admin\ProgramSelloutController::index');                         // list semua program
     $routes->get('program-sellout/create', 'Admin\ProgramSelloutController::create');                 // form create program
@@ -80,10 +99,6 @@ $routes->group('admin', ['filter' => 'role:admin,superadmin'], function ($routes
 
     $routes->post('program-sellout/import/(:num)', 'Admin\ProgramSelloutController::importExcel/$1');
     $routes->get('program-sellout/export/(:num)', 'Admin\ProgramSelloutController::exportExcel/$1');
-
-
-
-
 
     $routes->get('sellin', 'Admin\SellinController::index');
     $routes->post('sellin/create', 'Admin\SellinController::create');
