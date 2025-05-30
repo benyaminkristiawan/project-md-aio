@@ -18,4 +18,13 @@ class RewardModel extends Model
             ->get()
             ->getResultArray();
     }
+    public function getRewardByProgramId($programId)
+    {
+        return $this->db->table('programs')
+            ->select('rewards.jenis_reward')
+            ->join('rewards', 'rewards.id = programs.reward_id')
+            ->where('programs.id', $programId)
+            ->get()
+            ->getRowArray();
+    }
 }

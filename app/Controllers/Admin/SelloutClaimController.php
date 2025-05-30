@@ -41,13 +41,10 @@ class SelloutClaimController extends BaseController
         $salesTeams = (new \App\Models\ProgramSalesTeams())
             ->getSalesTeamsByProgramId($programId);
 
-        // $brands = (new BrandModel())
-        //     ->where('program_id', $programId) // Sesuaikan dengan struktur tabel brand
-        //     ->findAll();
+        $brands = (new BrandModel())->getBrandNameByProgramId($programId);
 
-        // $rewards = (new RewardModel())
-        //     ->where('program_id', $programId) // Sesuaikan dengan struktur tabel reward
-        //     ->findAll();
+        $rewards = (new RewardModel())->getRewardByProgramId($programId);
+
 
         $data = [
             'program'      => $program,
@@ -78,8 +75,16 @@ class SelloutClaimController extends BaseController
             $program = (new ProgramModel())->find($programId);
             $file = $this->request->getFile('sellout_file');
 
+            // Tambahkan validasi sheet aktif
             $spreadsheet = IOFactory::load($file->getTempName());
-            $rows = $spreadsheet->getActiveSheet()->toArray();
+            $activeSheet = $spreadsheet->getActiveSheet();
+
+            if (!$activeSheet) {
+                throw new \Exception("Tidak ada sheet aktif yang ditemukan di file Excel");
+            }
+
+            $rows = $activeSheet->toArray();
+
 
             $selloutModel = new SelloutClaimModel();
             $importedData = [];
@@ -102,7 +107,15 @@ class SelloutClaimController extends BaseController
                     'claim_value' => $validatedRow['claim_value']
                 ]);
 
-                $importedData[] = $validatedRow;
+                // Kumpulkan data untuk preview
+                $importedData[] = [
+                    'date' => $row[0],
+                    'brand' => $row[1],
+                    'product' => $row[2],
+                    'quantity' => $row[3],
+                    'branch' => $row[4],
+                    'sales_team' => $row[5]
+                ];
             }
 
             $this->db->transComplete();
@@ -118,21 +131,23 @@ class SelloutClaimController extends BaseController
 
     private function validateRow($programId, $row)
     {
-        // Validasi Marketplace
-        $marketplace = (new MarketplaceModel())->where('name', $row[4])->first();
+        $marketplaceModel = new MarketplaceModel();
+        $salesTeamModel = new SalesTeamModel();
+        $productModel = new ProgramProductModel();
+
+        $marketplace = $marketplaceModel->where('location', $row[4])->first();
         if (!$marketplace) {
+            // Bisa set marketplace_id null atau default
+            // Atau lewati baris ini dengan throw exception
             throw new \Exception("Marketplace {$row[4]} tidak valid");
         }
 
-        // Validasi Sales Team
-        $salesTeam = (new SalesTeamModel())->where('sales_team', $row[5])->first();
+        $salesTeam = $salesTeamModel->where('sales_team', $row[5])->first();
         if (!$salesTeam) {
             throw new \Exception("Sales Team {$row[5]} tidak valid");
         }
 
-        // Validasi Produk
-        $product = (new ProgramProductModel())
-            ->where('program_id', $programId)
+        $product = $productModel->where('program_id', $programId)
             ->where('product_name', $row[2])
             ->first();
 

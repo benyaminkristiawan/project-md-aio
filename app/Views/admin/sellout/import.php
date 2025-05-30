@@ -1,3 +1,10 @@
+<?php if (session()->getFlashdata('error')): ?>
+    <div class="alert alert-danger">
+        <?= session()->getFlashdata('error') ?>
+    </div>
+<?php endif; ?>
+
+
 <?= $this->extend('partials/main') ?>
 
 <?= $this->section('css') ?>
@@ -41,16 +48,43 @@ Import Data Sell Out
                     <div class="col-md-6">
                         <ul class="program-details mb-0">
                             <li><strong>Nama Program:</strong> <?= esc($program['name']) ?></li>
-
                             <li><strong>Periode:</strong> <?= date('d/m/Y', strtotime($program['start_date'])) ?> - <?= date('d/m/Y', strtotime($program['end_date'])) ?></li>
-                            <li><strong>Branch:</strong> <?= esc($program['branch']) ?></li>
+
+                            <li><strong>Marketplace:</strong>
+                                <?php if (!empty($marketplaces)) : ?>
+                                    <?= implode(', ', array_column($marketplaces, 'marketplace_name')) ?>
+                                <?php else : ?>
+                                    <span class="text-muted">Tidak ada marketplace</span>
+                                <?php endif; ?>
+                            </li>
                         </ul>
                     </div>
                     <div class="col-md-6">
                         <ul class="program-details mb-0">
-                            <li><strong>Sales Team:</strong> <?= esc($program['sales_team']) ?></li>
-                            <li><strong>Brand:</strong> <?= esc($program['brand']) ?></li>
-                            <li><strong>Reward:</strong> <?= esc($program['reward']) ?></li>
+                            <li><strong>Sales Team:</strong>
+                                <?php if (!empty($salesTeams)) : ?>
+                                    <?= implode(', ', array_column($salesTeams, 'sales_team_name')) ?>
+                                <?php else : ?>
+                                    <span class="text-muted">Tidak ada sales team</span>
+                                <?php endif; ?>
+                            </li>
+                            <li>
+                                <strong>Brand:</strong>
+                                <?php if (!empty($brands)) : ?>
+                                    <?= $brands['brand_name'] ?? '' ?>
+                                <?php else : ?>
+                                    <span class="text-muted">Tidak ada brand</span>
+                                <?php endif; ?>
+                            </li>
+                            <li>
+                                <strong>Reward:</strong>
+                                <?php if (!empty($rewards)) : ?>
+                                    <?= $rewards['jenis_reward'] ?? '' ?>
+                                <?php else : ?>
+                                    <span class="text-muted">Tidak ada reward</span>
+                                <?php endif; ?>
+                            </li>
+
                         </ul>
                     </div>
                 </div>
@@ -70,10 +104,10 @@ Import Data Sell Out
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($programProducts as $product): ?>
+                            <?php foreach ($products as $product): ?>
                                 <tr>
                                     <td><?= esc($product['product_name']) ?></td>
-                                    <td><?= 'Rp' . number_format($product['nominal_support'], 0, ',', '.') ?></td>
+                                    <td><?= 'Rp' . number_format($product['reward_value'], 0, ',', '.') ?></td>
                                     <td><?= $product['max_qty_claim'] ?? '-' ?></td>
                                     <td><?= $product['moq'] ?? '-' ?></td>
                                 </tr>

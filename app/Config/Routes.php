@@ -60,16 +60,6 @@ $routes->group('superadmin', ['filter' => 'role:superadmin'], function ($routes)
 
 // Routes for Admin and Superadmin (Admin Management)
 $routes->group('admin', ['filter' => 'role:admin,superadmin'], function ($routes) {
-    // // Program Routes
-    // $routes->get('programs', 'Admin\ProgramController::index', ['as' => 'admin.programs']);
-    // $routes->get('programs/create', 'Admin\ProgramController::create', ['as' => 'admin.programs.create']);
-    // $routes->post('programs/store', 'Admin\ProgramController::store', ['as' => 'admin.programs.store']);
-    // $routes->get('programs/edit/(:num)', 'Admin\ProgramController::edit/$1', ['as' => 'admin.programs.edit']);
-    // $routes->post('programs/update/(:num)', 'Admin\ProgramController::update/$1', ['as' => 'admin.programs.update']);
-    // $routes->get('programs/delete/(:num)', 'Admin\ProgramController::delete/$1', ['as' => 'admin.programs.delete']);
-
-
-
     // Program Management
     $routes->group('programs', function ($routes) {
         $routes->get('/', 'Admin\ProgramController::index', ['as' => 'admin.programs']);
@@ -77,7 +67,7 @@ $routes->group('admin', ['filter' => 'role:admin,superadmin'], function ($routes
         $routes->post('store', 'Admin\ProgramController::store', ['as' => 'admin.programs.store']);
         $routes->get('edit/(:num)', 'Admin\ProgramController::edit/$1', ['as' => 'admin.programs.edit']);
         $routes->post('update/(:num)', 'Admin\ProgramController::update/$1', ['as' => 'admin.programs.update']);
-        $routes->get('delete/(:num)', 'Admin\ProgramController::delete/$1', ['as' => 'admin.programs.delete']);
+        $routes->post('delete/(:num)', 'Admin\ProgramController::delete/$1', ['as' => 'admin.programs.delete']);
     });
 
     // Sellout Management
