@@ -18,12 +18,4 @@ class BrandModel extends Model
             ->get()
             ->getRowArray();
     }
-
-    public function getPrograms($brandId)
-    {
-        return $this->db->table('programs')
-            ->where('brand_id', $brandId)
-            ->get()
-            ->getResultArray();
-    }
 }

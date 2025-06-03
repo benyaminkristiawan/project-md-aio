@@ -60,17 +60,17 @@ $routes->group('superadmin', ['filter' => 'role:superadmin'], function ($routes)
 
 // Routes for Admin and Superadmin (Admin Management)
 $routes->group('admin', ['filter' => 'role:admin,superadmin'], function ($routes) {
-    // Program Management
+    // Program Sellout Management
     $routes->group('programs', function ($routes) {
-        $routes->get('/', 'Admin\ProgramController::index', ['as' => 'admin.programs']);
-        $routes->get('create', 'Admin\ProgramController::create', ['as' => 'admin.programs.create']);
-        $routes->post('store', 'Admin\ProgramController::store', ['as' => 'admin.programs.store']);
-        $routes->get('edit/(:num)', 'Admin\ProgramController::edit/$1', ['as' => 'admin.programs.edit']);
-        $routes->post('update/(:num)', 'Admin\ProgramController::update/$1', ['as' => 'admin.programs.update']);
-        $routes->post('delete/(:num)', 'Admin\ProgramController::delete/$1', ['as' => 'admin.programs.delete']);
+        $routes->get('/', 'Admin\ProgramController::index', ['as' => 'admin.programs']); // list semua program
+        $routes->get('create', 'Admin\ProgramController::create', ['as' => 'admin.programs.create']); // create program
+        $routes->post('store', 'Admin\ProgramController::store', ['as' => 'admin.programs.store']); // store lock data program_product
+        $routes->get('edit/(:num)', 'Admin\ProgramController::edit/$1', ['as' => 'admin.programs.edit']); //edit
+        $routes->post('update/(:num)', 'Admin\ProgramController::update/$1', ['as' => 'admin.programs.update']); //update
+        $routes->post('delete/(:num)', 'Admin\ProgramController::delete/$1', ['as' => 'admin.programs.delete']); //delete 
     });
 
-    // Sellout Management
+    // Sellout Data Management
     $routes->group('sellout', function ($routes) {
         $routes->get('import/(:num)', 'Admin\SelloutClaimController::import/$1', ['as' => 'admin.sellout.import']);
         $routes->post('process-import/(:num)', 'Admin\SelloutClaimController::processImport/$1', ['as' => 'admin.sellout.process-import']);
@@ -79,22 +79,22 @@ $routes->group('admin', ['filter' => 'role:admin,superadmin'], function ($routes
 
     // Admin Dashboard
     $routes->get('dashboard', 'AdminController::dashboard');
-    // Program Sellout
-    $routes->get('program-sellout', 'Admin\ProgramSelloutController::index');                         // list semua program
-    $routes->get('program-sellout/create', 'Admin\ProgramSelloutController::create');                 // form create program
-    $routes->post('program-sellout', 'Admin\ProgramSelloutController::store');                        // submit program baru
-    $routes->get('program-sellout/detail/(:num)', 'Admin\ProgramSelloutController::detail/$1');       // detail program + form input sellout
-    $routes->post('program-sellout/store-sellout/(:num)', 'Admin\ProgramSelloutController::storeSellout/$1'); // submit sellout
-    $routes->get('program-sellout/delete/(:num)', 'Admin\ProgramSelloutController::delete/$1');       // hapus program
+    // // Program Sellout
+    // $routes->get('program-sellout', 'Admin\ProgramSelloutController::index');                         // list semua program
+    // $routes->get('program-sellout/create', 'Admin\ProgramSelloutController::create');                 // form create program
+    // $routes->post('program-sellout', 'Admin\ProgramSelloutController::store');                        // submit program baru
+    // $routes->get('program-sellout/detail/(:num)', 'Admin\ProgramSelloutController::detail/$1');       // detail program + form input sellout
+    // $routes->post('program-sellout/store-sellout/(:num)', 'Admin\ProgramSelloutController::storeSellout/$1'); // submit sellout
+    // $routes->get('program-sellout/delete/(:num)', 'Admin\ProgramSelloutController::delete/$1');       // hapus program
 
-    $routes->post('program-sellout/import/(:num)', 'Admin\ProgramSelloutController::importExcel/$1');
-    $routes->get('program-sellout/export/(:num)', 'Admin\ProgramSelloutController::exportExcel/$1');
+    // $routes->post('program-sellout/import/(:num)', 'Admin\ProgramSelloutController::importExcel/$1');
+    // $routes->get('program-sellout/export/(:num)', 'Admin\ProgramSelloutController::exportExcel/$1');
 
-    $routes->get('sellin', 'Admin\SellinController::index');
-    $routes->post('sellin/create', 'Admin\SellinController::create');
-    $routes->post('sellin/add-detail', 'Admin\SellinController::addDetail');
-    $routes->get('sellin/delete-detail/(:num)', 'Admin\SellinController::deleteDetail/$1');
-    $routes->post('sellin/submit', 'Admin\SellinController::submit');
+    // $routes->get('sellin', 'Admin\SellinController::index');
+    // $routes->post('sellin/create', 'Admin\SellinController::create');
+    // $routes->post('sellin/add-detail', 'Admin\SellinController::addDetail');
+    // $routes->get('sellin/delete-detail/(:num)', 'Admin\SellinController::deleteDetail/$1');
+    // $routes->post('sellin/submit', 'Admin\SellinController::submit');
 
     // Brand Management
     $routes->get('brand', 'Admin\BrandController::index');
@@ -116,9 +116,9 @@ $routes->group('admin', ['filter' => 'role:admin,superadmin'], function ($routes
 
     // Reward Management
     $routes->get('reward', 'Admin\RewardController::index');
-    $routes->post('admin/reward/saveReward', 'Admin\RewardController::saveReward');
-    $routes->post('admin/reward/updateReward/(:num)', 'Admin\RewardController::updateReward/$1');
-    $routes->get('admin/reward/deleteReward/(:num)', 'Admin\RewardController::deleteReward/$1');
+    $routes->post('reward/saveReward', 'Admin\RewardController::saveReward');
+    $routes->post('reward/updateReward/(:num)', 'Admin\RewardController::updateReward/$1');
+    $routes->get('reward/deleteReward/(:num)', 'Admin\RewardController::deleteReward/$1');
 
     // Subkategori Management
     $routes->get('subkategori', 'Admin\SubkategoriController::index');
